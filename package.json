@@ -1,0 +1,34 @@
+{
+  "name": "recuperatoriomcga2021",
+  "version": "1.0.0",
+  "description": "Examen recuperatorio mcga 2021 turno noche cursada virtual Cabrera Lucas",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "npx nodemon Server/src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucascabrera1/RecuperatorioMCGA2021.git"
+  },
+  "keywords": [
+    "recuperatorio",
+    "mcga"
+  ],
+  "author": "Lucas Gabriel Cabrera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucascabrera1/RecuperatorioMCGA2021/issues"
+  },
+  "homepage": "https://github.com/lucascabrera1/RecuperatorioMCGA2021#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.8.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20"
+  },
+  "type": "module"
+}

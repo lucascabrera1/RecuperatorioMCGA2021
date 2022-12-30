@@ -1,0 +1,7 @@
+--Examen Recuperatorio MCGA 2021
+--Lucas Gabriel Cabrera
+Tecnologías utilizadas:
+-Express para crear servidores
+-Mongoose para crear conexion con bases de datos
+-Nodejs para ejecutar codigo JS fuera del navegador
+-Dotenv para utilizar variables de entorno
