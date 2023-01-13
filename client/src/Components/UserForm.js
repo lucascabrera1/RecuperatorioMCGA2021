@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addUser, updateUser} from '../feautures/users/userSlice'
 import {v4 as uuid} from 'uuid'
 import {useNavigate, useParams} from 'react-router-dom'
+import {useForm} from 'react-hook-form'
 
 function UserForm() {
+
+    const {register, handleSubmit, formState : {errors}} = useForm()
 
     const [user, setUser] = useState({
         id: '',
@@ -23,7 +26,7 @@ function UserForm() {
     const params = useParams();
     const users = useSelector(state => state.users);
 
-
+    const onSubmit = (data) => console.log(data)
 
     const handleChange = (e) => {
         setUser({
@@ -32,7 +35,7 @@ function UserForm() {
         })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmitUser = (e) => {
         e.preventDefault();
         if (params.id) {
             dispatch(updateUser({
@@ -61,28 +64,54 @@ function UserForm() {
     return (
         <div>
             <h1>User Form</h1>
-            <form onSubmit={handleSubmit} className='bg-zinc-800 max-w-sm p-4 mb-1'>
+            <form onSubmit={handleSubmit(onSubmit)} className='bg-zinc-800 max-w-sm p-4 mb-1'>
                 <label htmlFor='Nombre'>Nombre:</label>
-                <input
-                    type='text'
-                    value={user.Nombre}
-                    name='Nombre'
-                    placeholder='nombre' 
-                    onChange={handleChange}
-                    className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                /> 
+                    <div>
+                        <input
+                            type='text'
+                            {...register('Nombre', {
+                                required: true, 
+                                maxLength: 50,
+                                minLength: 3,
+                                pattern: /^[A-Za-z]+$/i
+                            })}
+                            value={user.Nombre}
+                            name='Nombre'
+                            placeholder='nombre' 
+                            onChange={handleChange}
+                            className='w-full p-2 rounded-md bg-zinc-600 mb-2'
+                        />
+                        {errors.Nombre?.type === "required" && <span style={{color: "red"}} >el nombre es obligatorio</span>}
+                        {errors.Nombre?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
+                        {errors.Nombre?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
+                        {errors.Nombre?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
+                        {console.log(user.Nombre)}
+                    </div>
                 <br/><br/>
                 <label htmlFor='Apellido' className='block text-sm font-bold'>Apellido</label>
-                <input 
-                    type='text'
-                    value={user.Apellido}
-                    name='Apellido' 
-                    placeholder='apellido'
-                    className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                    onChange={handleChange}
-                /> 
+                <div>
+                    <input 
+                        type='text'
+                        {...register('Apellido', {
+                            required: true, 
+                            maxLength: 50,
+                            minLength: 3,
+                            pattern: /^[A-Za-z]+$/i
+                        })}
+                        value={user.Apellido}
+                        name='Apellido' 
+                        placeholder='apellido'
+                        className='w-full p-2 rounded-md bg-zinc-600 mb-2'
+                        onChange={handleChange}
+                    />
+                        {errors.Apellido?.type === "required" && <span style={{color: "red"}} >el nombre es obligatorio</span>}
+                        {errors.Apellido?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
+                        {errors.Apellido?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
+                        {errors.Apellido?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
+                        {console.log(user.Apellido)}
+                </div>
                 <br/><br/>
-                <input 
+                <input
                     type='number' 
                     name='Dni'
                     className='w-full p-2 rounded-md bg-zinc-600 mb-2'

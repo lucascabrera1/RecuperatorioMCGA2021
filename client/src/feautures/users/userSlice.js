@@ -7,7 +7,6 @@ const initialState = [
 ]
 
 export const userSlice = createSlice({
-    
     name: 'users',
     initialState,
     reducers: {
@@ -35,7 +34,6 @@ export const userSlice = createSlice({
                 state.splice(state.indexOf(userfound), 1)
             }
         },
-        
     },
 })
 
