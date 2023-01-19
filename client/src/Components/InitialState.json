@@ -1,0 +1,33 @@
+[ {
+    "id": "1", 
+    "Nombre" : "Juan", 
+    "Apellido": "Correa", 
+    "Nacionalidad" : "Bolivia",
+    "Email" : "juancorrea@gmail.com",
+    "Fechanacimiento": "2000-10-30",
+    "Edad": 22,
+    "Dni": 35987456,
+    "Contrasena": "jjkj654dsa"
+},
+{
+    "id": "2", 
+    "Nombre": "Andres", 
+    "Apellido": "Casciani",
+    "Nacionalidad" : "Alemania",
+    "Email" : "acasciani@gmail.com",
+    "Fechanacimiento": "1989-12-16",
+    "Edad": 43,
+    "Dni": 30145690,
+    "Contrasena": "asodih44asdiuh"
+},
+{
+    "id": "3", 
+    "Nombre": "Valeria", 
+    "Apellido": "Cabrera",
+    "Nacionalidad" : "Brasil",
+    "Email" : "valecabrera1@gmail.com",
+    "Fechanacimiento": "1985-05-06",
+    "Edad": 37,
+    "Dni": 31890657,
+    "Contrasena": "qwedas897wer564we"
+}]

@@ -8,8 +8,8 @@ import UserForm from './Components/UserForm';
 function App() {
   
   return (
-    <div className="bg-zinc-900 text-white">
-      <div className='flex items-center justify-center h-full'>
+    <div className="bg-zinc-900  text-white">
+      <div className='items-center justify-center'>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home/>} />
