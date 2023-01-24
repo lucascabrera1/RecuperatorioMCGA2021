@@ -10,7 +10,7 @@ const schemaUsuario = new mongoose.Schema ({
         required : true
     },
     fechanacimiento : {
-        type: String,
+        type: Date,
         required: true
     },
     dni : {

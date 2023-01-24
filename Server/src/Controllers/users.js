@@ -1,12 +1,27 @@
 import User from '../Models/User.js'
 
+const ValidateUser = (body) => {
+    if (body.nombre == null || body.nombre.length < 1) {
+        return "el nombre es obligatorio"
+    }
+    return null
+}
+
 const AddUser = async (req, res) => {
     try {
-        const newUSer =  new User(req.body)
-        //console.log(newUSer)
-        const usuarioGuardado = await newUSer.save()
-        console.log(usuarioGuardado)
-        return res.send(usuarioGuardado)
+        let error = ValidateUser(req.body)
+        if (!error) {
+            const newUSer =  new User(req.body)
+            //console.log(newUSer)
+            const usuarioGuardado = await newUSer.save()
+            console.log(usuarioGuardado)
+            return res.send(usuarioGuardado)
+        } else{
+            res.status(400).json({
+                error: true,
+                message: error
+            })
+        }
     } catch (error) {
         console.error(error)
         return res.status(500).json({message: error.message})
@@ -22,15 +37,12 @@ const DeleteUser = async (req, res) => {
                 message: "User not found"
             })
         }
-        return res.status(202).json({
-            data: userfound,
-            error: false,
-            message: "Usuario eliminado correctamente"
-        })
+        return res.status(200).json(userfound)
     } catch (error) {
-        return res.status(404).json({
+        console.error(error)
+        return res.status(500).json({
             error: true,
-            message: error
+            message: error.message
         })
     }
 }
@@ -40,7 +52,7 @@ const EditUser = async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate({_id: req.params.id}, req.body, {new : true})
         return res.send(updatedUser)
     } catch (error) {
-        return res.status(500).json({message: "user not found"})
+        return res.status(500).json({message: error.message})
     }
 }
 
@@ -82,12 +94,9 @@ const getUserByDni = async (req, res) => {
                 message : "User not Found"
             })
         }
-        return res.status(200).json({
-            data : response,
-            error: false
-        })
+        return res.status(200).json(response)
     } catch (error) {
-        return res.status(400).json({
+        return res.status(500).json({
             error: true,
             message : error
         })
@@ -105,12 +114,9 @@ const getUserByEmail = async (req, res) =>{
                 message : "User not Found"
             })
         }
-        return res.status(200).json({
-            data : response,
-            error: false
-        })
+        return res.status(200).json(response)
     } catch (error) {
-        return res.status(400).json({
+        return res.status(500).json({
             error: true,
             message : error
         })

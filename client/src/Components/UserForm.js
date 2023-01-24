@@ -10,15 +10,15 @@ function UserForm() {
     const {register, handleSubmit, formState : {errors}} = useForm()
 
     const [user, setUser] = useState({
-        id: '',
-        Nombre: '',
-        Apellido: '',
-        Dni: '',
-        Nacionalidad: '',
-        Password: '',
-        Email: '',
-        Fechanacimiento: '',
-        Edad: ''
+        _id: '',
+        nombre: '',
+        apellido: '',
+        dni: '',
+        nacionalidad: '',
+        contraseña: '',
+        email: '',
+        fechanacimiento: '',
+        edad: ''
     })
 
     const dispatch = useDispatch();
@@ -31,7 +31,7 @@ function UserForm() {
 
     const fnac = data => data =  user.Fechanacimiento
 
-    const CalcularEdad = fnac => {
+    /*const CalcularEdad = fnac => {
         console.log(fnac)
         const fechaActual = new Date();
         const anoActual = parseInt(fechaActual.getFullYear())
@@ -48,9 +48,9 @@ function UserForm() {
                 edad--
             }
         }
-        user.Edad = edad
-        return user.Edad
-    }
+        user.edad = edad
+        return user.edad
+    } */
     
 
     const handleChange = (e) => {
@@ -61,6 +61,8 @@ function UserForm() {
     }
 
     const handleSubmitUser = (e) => {
+        const data = user
+        console.log(params)
         e.preventDefault();
         if (params.id) {
             dispatch(updateUser({
@@ -69,19 +71,21 @@ function UserForm() {
         } else {
             dispatch(addUser({
                 ...user,
-                id: uuid(),
+                _id: uuid(),
             }))
         }
-        
         navigate('/')
     }
 
 
     useEffect (()=> {
+        console.log('id del usuario')
         console.log(params.id)
+        console.log('usuarios')
         console.log(users)
         if (params.id) {
-            setUser(users.find((user) => user.id === params.id))
+            setUser(users.find((user) => user._id === params.id))
+            console.log('usuario encontrado')
             console.log(user)
         }
     }, [params, users])
@@ -93,112 +97,112 @@ function UserForm() {
                     <div>
                         <input
                             type='text'
-                            {...register('Nombre', {
+                            {...register('nombre', {
                                 required: true, 
                                 maxLength: 50,
                                 minLength: 3,
                                 pattern: /^[A-Za-z]+$/i
                             })}
-                            value={user.Nombre}
-                            name='Nombre'
+                            value={user.nombre}
+                            name='nombre'
                             placeholder='nombre' 
                             onChange={handleChange}
                             className='w-full p-2 rounded-md bg-zinc-600 mb-2'
                         />
-                        {errors.Nombre?.type === "required" && <span style={{color: "red"}} >el nombre es obligatorio</span>}
-                        {errors.Nombre?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
-                        {errors.Nombre?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
-                        {errors.Nombre?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
-                        {console.log(user.Nombre)}
+                        {errors.nombre?.type === "required" && <span style={{color: "red"}} >el nombre es obligatorio</span>}
+                        {errors.nombre?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
+                        {errors.nombre?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
+                        {errors.nombre?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
+                        {console.log(user.nombre)}
                     </div>
                 <br/><br/>
                 <div>
                     <input 
                         type='text'
-                        {...register('Apellido', {
+                        {...register('apellido', {
                             required: true, 
                             maxLength: 50,
                             minLength: 3,
                             pattern: /^[A-Za-z]+$/i
                         })}
-                        value={user.Apellido}
-                        name='Apellido' 
-                        placeholder='apellido'
+                        value={user.apellido}
+                        name='apellido' 
+                        placeholder='Apellido'
                         className='w-full p-2 rounded-md bg-zinc-600 mb-2'
                         onChange={handleChange}
                     />
-                        {errors.Apellido?.type === "required" && <span style={{color: "red"}} >el nombre es obligatorio</span>}
-                        {errors.Apellido?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
-                        {errors.Apellido?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
-                        {errors.Apellido?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
+                        {errors.apellido?.type === "required" && <span style={{color: "red"}} >el apellido es obligatorio</span>}
+                        {errors.apellido?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
+                        {errors.apellido?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
+                        {errors.apellido?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
                 </div>
                 <br/><br/>
                 <div>
                     <input
                         type='number'
-                        {...register('Dni', {
+                        {...register('dni', {
                             required: true, 
                             maxLength: 10,
                             minLength: 6
                         })}
-                        name='Dni'
+                        name='dni'
                         className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                        value={user.Dni}
+                        value={user.dni}
                         placeholder='documento' 
                         onChange={handleChange}
                     />
-                    {errors.Dni?.type === "required" && <span style={{color: "red"}} >el documento es requerido</span>}
-                    {errors.Dni?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 10 caracteres</span>}
-                    {errors.Dni?.type === "minLength" && <span style={{color: "red"}} >al menos 6 caracteres</span>}
+                    {errors.dni?.type === "required" && <span style={{color: "red"}} >el documento es requerido</span>}
+                    {errors.dni?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 10 caracteres</span>}
+                    {errors.dni?.type === "minLength" && <span style={{color: "red"}} >al menos 6 caracteres</span>}
                 </div>
                 <br/><br/>
                 <div>
                 <input 
                     type='email'
-                    {...register('Email', {
+                    {...register('email', {
                         required: true, 
                         maxLength: 10,
                         minLength: 6
                     })}
                     className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                    name='Email'
-                    value={user.Email}
+                    name='email'
+                    value={user.email}
                     placeholder='email' 
                     onChange={handleChange}
                     />
-                    {errors.Email?.type === "required" && <span style={{color: "red"}} >el email es requerido</span>}
+                    {errors.email?.type === "required" && <span style={{color: "red"}} >el email es requerido</span>}
                 </div>
                 <br/><br/>
                 <label className='block text-sm font-bold'>Fecha de nacimiento</label>
                     <div>
                         <input 
                             type='date'
-                            {...register('Fechanacimiento', {
+                            {...register('fechanacimiento', {
                                 required: true, 
                                 min: "1958-01-01",
                                 max: "2004-12-31"
                             })}
                             className='w-full p-2 rounded-md bg-zinc-600 mb-2' 
-                            name='Fechanacimiento'
-                            value={user.Fechanacimiento}
+                            name='fechanacimiento'
+                            value={user.fechanacimiento}
                             placeholder = 'fecha de nacimiento' 
                             onChange={handleChange}
                         /> 
                     </div>
-                    {errors.Fechanacimiento?.type === "required" && <span style={{color: "red"}} >la fecha de nacimiento es requerida</span>}
-                    {errors.Fechanacimiento?.type === "min" && <span style={{color: "red"}} >no puede ser inferior a 1958</span>}
-                    {errors.Fechanacimiento?.type === "max" && <span style={{color: "red"}} >no puede ser superior a 2004</span>}
+                    {errors.fechanacimiento?.type === "required" && <span style={{color: "red"}} >la fecha de nacimiento es requerida</span>}
+                    {errors.fechanacimiento?.type === "min" && <span style={{color: "red"}} >no puede ser inferior a 1958</span>}
+                    {errors.fechanacimiento?.type === "max" && <span style={{color: "red"}} >no puede ser superior a 2004</span>}
                     
                 <br/><br/>
                 <label className='block text-sm font-bold'>nacionalidad</label>
                 <select className='w-full p-2 rounded-md bg-zinc-600 mb-2' id='nacion'>
                     {nations.map(nation =>
-                        <option key={nation.id} value={user.Nacionalidad}>{nation.name}</option>
+                        <option key={nation.id} value={nation.id}>{nation.name}</option>
                     )}
                 </select>
                 <br/><br/>
 
-                <p>edad {user.Edad} años</p>
+                <p>edad {user.edad} años</p>
                 
                {/*  <input 
                     type='number'
@@ -212,9 +216,9 @@ function UserForm() {
                 <input 
                     type='password'
                     className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                    name='Password'
-                    value={user.Password}
-                    placeholder= 'password' 
+                    name='contraseña'
+                    value={user.contraseña}
+                    placeholder= 'contraseña' 
                     onChange={handleChange}
                 /> 
                 <br/><br/>
