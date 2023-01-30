@@ -70,7 +70,7 @@ const getUsers = async (req, res) => {
                 "email" : elem.email,
                 "dni" : elem.dni,
                 "contraseña" : elem.contraseña,
-                "fechaNacimiento" : elem.fechanacimiento,
+                "fechanacimiento" : elem.fechanacimiento,
                 "edad" : elem.edad,
                 "nacionalidad" : elem.nacionalidad
             }

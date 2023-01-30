@@ -5,7 +5,7 @@ import {connect} from './connection.js'
 import cors from 'cors'
 import dotenv from 'dotenv'
 
-dotenv.config({path: '../../.env'})
+dotenv.config({path: '../.env'})
 
 connect()
 

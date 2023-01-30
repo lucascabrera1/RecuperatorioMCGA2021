@@ -22,13 +22,15 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
     }
 })
 
-export const SaveUser = createAsyncThunk('users/saveUser', async () => {
+export const SaveUser = createAsyncThunk('users/saveUser', async (initialUSer) => {
     try {
-        const response = await axios.post(URL_BASE2)
+        console.log('entra al save user')
+        console.log(initialUSer)
+        const response = await axios.post(URL_BASE2, initialUSer)
         console.log(response.data)
         return response.data
     } catch (error) {
-        console.error(error)
+        console.error(error.message)
         return error.message
     }
 })
@@ -37,14 +39,14 @@ export const userSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        addUser: (state, action) => {
+        /* addUser: (state, action) => {
             console.log(action.type)
             console.log(action.payload)
             state.push(action.payload)
-        },
+        }, */
         updateUser: (state, action) => {
             console.log(action.payload)
-            const {_id, nombre, apellido, email, nacionalidad, edad, fechaNacimiento, contraseña} = action.payload;
+            const {_id, nombre, apellido, email, nacionalidad, edad, fechanacimiento, contraseña} = action.payload;
             const userFound = state.find(user => user._id === _id);
             if (userFound) {
                 userFound.apellido = apellido;
@@ -52,7 +54,7 @@ export const userSlice = createSlice({
                 userFound.nacionalidad = nacionalidad;
                 userFound.email = email;
                 userFound.edad = edad;
-                userFound.fechanacimiento = fechaNacimiento;
+                userFound.fechanacimiento = fechanacimiento;
                 userFound.contraseña = contraseña
             }
         },
@@ -65,7 +67,7 @@ export const userSlice = createSlice({
             }
         },
     },
-    extraReducers: builder => {
+    extraReducers: (builder) => {
             builder
             .addCase(fetchUsers.fulfilled, (state, action) => {
                 return action.payload
@@ -83,7 +85,7 @@ export const userSlice = createSlice({
             }) */
             .addCase(SaveUser.fulfilled, (state, action) => {
                 console.log('llega al save user')
-                SaveUser(...state, action.payload)
+                state.push(action.payload)
             })
         }
     }

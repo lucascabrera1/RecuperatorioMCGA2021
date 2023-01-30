@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addUser, updateUser} from '../feautures/users/userSlice'
-import {v4 as uuid} from 'uuid'
+import {SaveUser, updateUser} from '../feautures/users/userSlice'
+//import {v4 as uuid} from 'uuid'
+import { nanoid } from '@reduxjs/toolkit'
 import {useNavigate, useParams} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 
@@ -69,9 +70,11 @@ function UserForm() {
                 ...user, id: params.id
             }))
         } else {
-            dispatch(addUser({
+            dispatch(SaveUser({
                 ...user,
-                _id: uuid(),
+                //_id: uuid(),
+                //_id: nanoid()
+                _id : users.length + 1
             }))
         }
         navigate('/')
@@ -195,23 +198,43 @@ function UserForm() {
                     
                 <br/><br/>
                 <label className='block text-sm font-bold'>nacionalidad</label>
-                <select className='w-full p-2 rounded-md bg-zinc-600 mb-2' id='nacion'>
+                {/* <select className='w-full p-2 rounded-md bg-zinc-600 mb-2' id='nacion' value="AR">
                     {nations.map(nation =>
-                        <option key={nation.id} value={nation.id}>{nation.name}</option>
+                        <option key={nation.id} value="AR">{nation.name}</option>
                     )}
-                </select>
+                </select> */}
+                <div>
+                    <input 
+                        type='text'
+                        {...register('nacionalidad', {
+                            required: true, 
+                            maxLength: 50,
+                            minLength: 3,
+                            pattern: /^[A-Za-z]+$/i
+                        })}
+                        value={user.nacionalidad}
+                        name='nacionalidad' 
+                        placeholder='Nacionalidad'
+                        className='w-full p-2 rounded-md bg-zinc-600 mb-2'
+                        onChange={handleChange}
+                    />
+                        {errors.nacionalidad?.type === "required" && <span style={{color: "red"}} >la nacionalidad es obligatoria</span>}
+                        {errors.nacionalidad?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
+                        {errors.nacionalidad?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
+                        {errors.nacionalidad?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
+                </div>
                 <br/><br/>
 
                 <p>edad {user.edad} años</p>
                 
-               {/*  <input 
+               {  <input 
                     type='number'
                     className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                    name='Edad'
-                    value={user.Edad}
+                    name='edad'
+                    value={user.edad}
                     placeholder='edad' 
                     onChange={handleChange}
-                /> */}
+                />}
                 <br/><br/>
                 <input 
                     type='password'
