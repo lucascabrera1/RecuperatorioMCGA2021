@@ -20,4 +20,4 @@ export const store = configureStore({
     },
 }, applyMiddleware(thunk))
 
-console.log(store.getState())
+//console.log(store.getState())

@@ -2,7 +2,11 @@ import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 //import initialstate from '../../Components/InitialState.json'
 import axios from 'axios'
 
-const initialState = []
+const initialState = {
+    data:[],
+    status: "idle",
+    error: null
+}
 
 const URL_BASE = 'https://jsonplaceholder.typicode.com/users'
 
@@ -10,11 +14,8 @@ const URL_BASE2 = 'http://localhost:4500/usuarios'
 console.log(URL_BASE)
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-    console.log('al menos llega al fetchUsers')
     try {
-        console.log('llega al try')
         const response = await axios.get(URL_BASE2)
-        console.log(response.data)
         return [...response.data]
     } catch (error) {
         console.log(console.error(error))
@@ -70,7 +71,9 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
             builder
             .addCase(fetchUsers.fulfilled, (state, action) => {
-                return action.payload
+                console.log(state)
+                state.status = "completed"
+                state.data = action.payload
             })
             /* .addCase(fetchUsers.rejected, (state, action) => {
                 state.status = 'failed'
@@ -85,13 +88,13 @@ export const userSlice = createSlice({
             }) */
             .addCase(SaveUser.fulfilled, (state, action) => {
                 console.log('llega al save user')
-                state.push(action.payload)
+                state.data.push(action.payload)
             })
         }
     }
 )
 
-export const selectAllUsers = (state) => state.users
+export const selectAllUsers = (state) => { console.log(state.users); return state.users.data}
 export const getUsersStatus = (state) => state.users.status
 export const getUsersErrors = (state) => state.users.error
 

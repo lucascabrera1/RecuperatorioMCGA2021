@@ -1,12 +1,18 @@
 import React from 'react'
 import {useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { deleteUser, selectAllUsers } from '../feautures/users/userSlice'
-
+import { deleteUser, selectAllUsers, getUsersStatus, fetchUsers } from '../feautures/users/userSlice'
+import { useEffect } from 'react';
 
 function UsersList() {
   const dispatch = useDispatch()
     const users = useSelector(selectAllUsers)
+    const status = useSelector(getUsersStatus)
+
+    useEffect(()=>{
+      if (status=="idle")
+        dispatch(fetchUsers())
+    },[status])
     
     const handleDelete = _id => {
       dispatch(deleteUser(_id))

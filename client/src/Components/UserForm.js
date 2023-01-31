@@ -10,8 +10,9 @@ function UserForm() {
 
     const {register, handleSubmit, formState : {errors}} = useForm()
 
-    const [user, setUser] = useState({
-        _id: '',
+    const [id,setId] = useState()
+
+    const userInitial = {
         nombre: '',
         apellido: '',
         dni: '',
@@ -20,7 +21,9 @@ function UserForm() {
         email: '',
         fechanacimiento: '',
         edad: ''
-    })
+    }
+
+    const [user, setUser] = useState(userInitial)
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -61,7 +64,7 @@ function UserForm() {
         })
     }
 
-    const handleSubmitUser = (e) => {
+    const handleSubmitUser = async (e) => {
         const data = user
         console.log(params)
         e.preventDefault();
@@ -70,14 +73,23 @@ function UserForm() {
                 ...user, id: params.id
             }))
         } else {
-            dispatch(SaveUser({
+            /*dispatch(SaveUser({
                 ...user,
                 //_id: uuid(),
                 //_id: nanoid()
                 _id : users.length + 1
-            }))
+            }))*/
+            try {
+                await dispatch(SaveUser(user)).unwrap()
+                alert('usuario guardado correctamente')
+                setUser(userInitial)
+            } catch (error) {
+                console.error(error)
+            }
+            
         }
-        navigate('/')
+
+        //navigate('/')
     }
 
 
