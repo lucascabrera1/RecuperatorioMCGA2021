@@ -1,7 +1,7 @@
 import React from 'react'
 import {useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { deleteUser, selectAllUsers, getUsersStatus, fetchUsers } from '../feautures/users/userSlice'
+import { DeleteUser, selectAllUsers, getUsersStatus, fetchUsers } from '../feautures/users/userSlice'
 import { useEffect } from 'react';
 
 function UsersList() {
@@ -15,7 +15,7 @@ function UsersList() {
     },[status])
     
     const handleDelete = _id => {
-      dispatch(deleteUser(_id))
+      dispatch(DeleteUser(_id))
     }
 
   return (

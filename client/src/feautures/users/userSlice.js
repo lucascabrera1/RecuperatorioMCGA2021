@@ -8,14 +8,12 @@ const initialState = {
     error: null
 }
 
-const URL_BASE = 'https://jsonplaceholder.typicode.com/users'
 
-const URL_BASE2 = 'http://localhost:4500/usuarios'
-console.log(URL_BASE)
+const URL_BASE = 'http://localhost:4500/usuarios'
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
     try {
-        const response = await axios.get(URL_BASE2)
+        const response = await axios.get(URL_BASE)
         return [...response.data]
     } catch (error) {
         console.log(console.error(error))
@@ -27,8 +25,29 @@ export const SaveUser = createAsyncThunk('users/saveUser', async (initialUSer) =
     try {
         console.log('entra al save user')
         console.log(initialUSer)
-        const response = await axios.post(URL_BASE2, initialUSer)
+        const response = await axios.post(URL_BASE, initialUSer)
         console.log(response.data)
+        return response.data
+    } catch (error) {
+        console.error(error.message)
+        return error.message
+    }
+})
+
+export const DeleteUser = createAsyncThunk('users/DeleteUser', async (initialUSer) => {
+    try {
+        const response = await axios.delete(URL_BASE, initialUSer)
+        console.log(response.data)
+        return response.data
+    } catch (error) {
+        console.error(error.message)
+        return error.message
+    }
+})
+
+export const UpdateUser = createAsyncThunk('users/UpdateUser', async(initialUSer) => {
+    try {
+        const response = await axios.patch(URL_BASE, initialUSer)
         return response.data
     } catch (error) {
         console.error(error.message)
@@ -59,14 +78,14 @@ export const userSlice = createSlice({
                 userFound.contraseña = contraseña
             }
         },
-        deleteUser: (state, action) => {
+        /* deleteUser: (state, action) => {
             const userfound = state.find(user => user._id === action.payload)
             console.log(userfound)
             if (userfound) {
                 console.log(action.payload)
                 state.splice(state.indexOf(userfound), 1)
             }
-        },
+        }, */
     },
     extraReducers: (builder) => {
             builder
@@ -89,6 +108,10 @@ export const userSlice = createSlice({
             .addCase(SaveUser.fulfilled, (state, action) => {
                 console.log('llega al save user')
                 state.data.push(action.payload)
+            })
+            .addCase(DeleteUser.fulfilled, (state, action) => {
+                console.log('llega al delete user')
+                state.data.splice(state.indexOf(action.payload), 1)
             })
         }
     }
