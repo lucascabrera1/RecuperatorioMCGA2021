@@ -7,6 +7,25 @@ const ValidateUser = (body) => {
     return null
 }
 
+const GetUser = async (req, res) =>{
+    try {
+        const userfound = await User.findOne({_id: req.params.id})
+        if (!userfound || userfound.length === 0){
+            return res.status(404).json({
+                error: true,
+                message: "User not found"
+            })
+        }
+        return res.status(200).json(userfound)
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({
+            error: true,
+            message: error.message
+        })
+    }
+}
+
 const AddUser = async (req, res) => {
     try {
         let error = ValidateUser(req.body)
@@ -127,4 +146,4 @@ const todosLosMetodos = async (req, res) => {
     return await res.send("devuelve el mismo mensaje independientemente del metodo seleccionado")
 }
 
-export default {AddUser, EditUser, DeleteUser, getUsers, getUserByDni, getUserByEmail, todosLosMetodos}
+export default {AddUser, GetUser, EditUser, DeleteUser, getUsers, getUserByDni, getUserByEmail, todosLosMetodos}

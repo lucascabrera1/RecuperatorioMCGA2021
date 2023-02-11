@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {SaveUser, updateUser} from '../feautures/users/userSlice'
+import {SaveUser, UpdateUser} from '../feautures/users/userSlice'
 //import {v4 as uuid} from 'uuid'
 import { nanoid } from '@reduxjs/toolkit'
 import {useNavigate, useParams} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
+import { FetchUser } from '../feautures/users/userSlice'
 
 function UserForm() {
 
@@ -33,7 +34,7 @@ function UserForm() {
 
     const onSubmit = data => console.log(data)
 
-    const fnac = data => data =  user.Fechanacimiento
+    const fnac = data => data =  user.fechanacimiento
 
     /*const CalcularEdad = fnac => {
         console.log(fnac)
@@ -66,12 +67,18 @@ function UserForm() {
 
     const handleSubmitUser = async (e) => {
         const data = user
-        console.log(params)
         e.preventDefault();
         if (params.id) {
-            dispatch(updateUser({
-                ...user, id: params.id
-            }))
+            try {
+                console.log(user)
+                await dispatch(UpdateUser({...user, id: params.id})).unwrap()
+                alert("usuario modificado correctamente")
+                setUser(userInitial)
+                navigate('/users')
+            } catch (error) {
+                console.error(error)
+            }
+            
         } else {
             /*dispatch(SaveUser({
                 ...user,
@@ -93,17 +100,20 @@ function UserForm() {
     }
 
 
-    useEffect (()=> {
-        console.log('id del usuario')
-        console.log(params.id)
-        console.log('usuarios')
-        console.log(users)
-        if (params.id) {
-            setUser(users.find((user) => user._id === params.id))
-            console.log('usuario encontrado')
-            console.log(user)
+    useEffect ( ()=> {
+        async function fetchUser () {
+            console.log('id del usuario')
+            console.log(params.id)
+            console.log('usuarios')
+            console.log(users)
+            if (params.id) {
+                const userFounded = await (dispatch (FetchUser(params.id)).unwrap())
+                console.log(userFounded)
+                setUser(userFounded)
+            }
         }
-    }, [params, users])
+       fetchUser()
+    }, [params])
 
     return (
         <div>
@@ -128,7 +138,7 @@ function UserForm() {
                         {errors.nombre?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
                         {errors.nombre?.type === "minLength" && <span style={{color: "red"}} >al menos 3 caracteres</span>}
                         {errors.nombre?.type === "pattern" && <span style={{color: "red"}} >solo caracteres de la a a la z</span>}
-                        {console.log(user.nombre)}
+                        {console.log('nombre ' + user.nombre)}
                     </div>
                 <br/><br/>
                 <div>

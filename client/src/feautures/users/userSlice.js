@@ -9,7 +9,7 @@ const initialState = {
 }
 
 
-const URL_BASE = 'http://localhost:4500/usuarios'
+const URL_BASE = 'http://localhost:4500/usuarios/'
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
     try {
@@ -34,9 +34,9 @@ export const SaveUser = createAsyncThunk('users/saveUser', async (initialUSer) =
     }
 })
 
-export const DeleteUser = createAsyncThunk('users/DeleteUser', async (initialUSer) => {
+export const DeleteUser = createAsyncThunk('users/DeleteUser', async (_id) => {
     try {
-        const response = await axios.delete(URL_BASE, initialUSer)
+        const response = await axios.delete(URL_BASE + _id)
         console.log(response.data)
         return response.data
     } catch (error) {
@@ -45,9 +45,20 @@ export const DeleteUser = createAsyncThunk('users/DeleteUser', async (initialUSe
     }
 })
 
+export const FetchUser = createAsyncThunk('users/fetchUser', async (_id)=> {
+    try {
+        const response = await axios.get(URL_BASE + _id)
+        return response.data
+    } catch (error) {
+        console.error(error)
+        return error.message
+    }
+})
+
 export const UpdateUser = createAsyncThunk('users/UpdateUser', async(initialUSer) => {
     try {
-        const response = await axios.patch(URL_BASE, initialUSer)
+        console.log(initialUSer)
+        const response = await axios.patch(URL_BASE + initialUSer._id, initialUSer)
         return response.data
     } catch (error) {
         console.error(error.message)
@@ -64,7 +75,7 @@ export const userSlice = createSlice({
             console.log(action.payload)
             state.push(action.payload)
         }, */
-        updateUser: (state, action) => {
+        /* updateUser: (state, action) => {
             console.log(action.payload)
             const {_id, nombre, apellido, email, nacionalidad, edad, fechanacimiento, contraseña} = action.payload;
             const userFound = state.find(user => user._id === _id);
@@ -77,7 +88,7 @@ export const userSlice = createSlice({
                 userFound.fechanacimiento = fechanacimiento;
                 userFound.contraseña = contraseña
             }
-        },
+        }, */
         /* deleteUser: (state, action) => {
             const userfound = state.find(user => user._id === action.payload)
             console.log(userfound)
@@ -110,8 +121,28 @@ export const userSlice = createSlice({
                 state.data.push(action.payload)
             })
             .addCase(DeleteUser.fulfilled, (state, action) => {
-                console.log('llega al delete user')
-                state.data.splice(state.indexOf(action.payload), 1)
+                state.data = state.data.filter( (elem)=> {
+                    return elem._id !== action.payload._id
+                })
+            })
+            .addCase(UpdateUser.fulfilled, (state, action) => {
+                state.data = state.data.map(item => {
+                    if (item._id === action.payload._id){
+                        return action.payload
+                    } else {
+                        return item
+                    }
+                })
+                console.log(action.payload)
+            }) 
+            .addCase(FetchUser.fulfilled, (state, action) => {
+                state.data = state.data.map(item => {
+                    if (item._id === action.payload._id) {
+                        return action.payload
+                    } else {
+                        return item
+                    }
+                })
             })
         }
     }

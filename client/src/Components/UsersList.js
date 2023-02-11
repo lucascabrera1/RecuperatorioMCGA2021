@@ -14,8 +14,9 @@ function UsersList() {
         dispatch(fetchUsers())
     },[status])
     
-    const handleDelete = _id => {
-      dispatch(DeleteUser(_id))
+    const handleDelete = (_id, nombre) => {
+      let ok = window.confirm(`¿Está seguro de que quiere eliminar al usuario: ${nombre}?`)
+      if (ok) {dispatch(DeleteUser(_id))}
     }
 
   return (
@@ -39,7 +40,7 @@ function UsersList() {
                         className='bg-indigo-600 px-2 py-1 rounded-sm text-xs self-center gap-3'> Edit
                       </Link>
                       <button 
-                        onClick={()=> handleDelete(user._id)}
+                        onClick={()=> handleDelete(user._id, user.nombre)}
                         className = 'bg-red-500 px-2 py-1 text-xs rounded-md'
                       >Delete user</button>
                     </div>
