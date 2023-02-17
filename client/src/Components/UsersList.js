@@ -19,17 +19,23 @@ function UsersList() {
       if (ok) {dispatch(DeleteUser(_id))}
     }
 
+  const toHumanDate = (date) => {
+    let newDate = date.substring(0, 10)
+    return newDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
+  }  
+
   return (
     <div className='w-15/1 bg-red-100'>
       <h1 className='rounded-md bg-black'>Cantidad de usuarios registrados al momento: {users.length}</h1>
         <div className='grid grid-cols-3 gap-5 self-center'>
-          {users.map( user => (
+          {users.map( user => {
+            return (
               <div key={user._id} className='bg-neutral-800 p-1 rounded-md'>
                   <header key={user._id} className='rounded-sm place-self-center'>
                     <p>id: {user._id}</p>
                     <p>nombre: {user.nombre}</p>
                     <p>apellido: {user.apellido}</p>
-                    <p>fecha de nacimiento: {user.fechanacimiento}</p>
+                    <p>fecha de nacimiento: {toHumanDate(user.fechanacimiento)}</p>
                     <p>documento:  {user.dni}</p>
                     <p>edad: {user.edad} años</p>
                     <p>email: {user.email}</p>
@@ -46,7 +52,7 @@ function UsersList() {
                     </div>
                   </header>
               </div>
-          ))}
+          )})}
         </div>
     </div>
   )

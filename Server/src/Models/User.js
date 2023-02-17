@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const schemaUsuario = new mongoose.Schema ({
+let schemaUsuario = new mongoose.Schema ({
     nombre : {
         type: String,
         required: true
@@ -18,10 +18,10 @@ const schemaUsuario = new mongoose.Schema ({
         unique: true,
         required: true
     },
-    edad: {
+    /*edad: {
         type: Number,
         required : true
-    },
+    },*/
     nacionalidad: {
         type: String,
         required: true
@@ -34,6 +34,15 @@ const schemaUsuario = new mongoose.Schema ({
         type: String,
         required : true
     }
+})
+
+schemaUsuario.virtual("edad").get(function() {
+    //calcualr edad a partir de this.fechanacimiento
+    return 40;
+})
+
+schemaUsuario.set("toJSON", {
+    virtuals: true
 })
 
 export default mongoose.model('User', schemaUsuario)

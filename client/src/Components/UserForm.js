@@ -36,7 +36,7 @@ function UserForm() {
 
     const fnac = data => data =  user.fechanacimiento
 
-    /*const CalcularEdad = fnac => {
+    const CalcularEdad = fnac => {
         console.log(fnac)
         const fechaActual = new Date();
         const anoActual = parseInt(fechaActual.getFullYear())
@@ -53,16 +53,28 @@ function UserForm() {
                 edad--
             }
         }
-        user.edad = edad
-        return user.edad
-    } */
+        return edad
+    } 
     
 
     const handleChange = (e) => {
+        console.log(e.target.name)
         setUser({
             ...user,
-            [e.target.name] : e.target.value
+            [e.target.name] : e.target.value,
+            
         })
+    }
+
+    const handleBlur = (e) => {
+        if (e.target.name == 'fechanacimiento') {
+            let edad = CalcularEdad(e.target.value)
+            console.log( edad)
+            setUser({
+                ...user,
+                ["edad"] : edad
+            })
+        }
     }
 
     const handleSubmitUser = async (e) => {
@@ -209,9 +221,10 @@ function UserForm() {
                             })}
                             className='w-full p-2 rounded-md bg-zinc-600 mb-2' 
                             name='fechanacimiento'
-                            value={user.fechanacimiento}
+                            value={user.fechanacimiento.substring(0, 10)}
                             placeholder = 'fecha de nacimiento' 
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         /> 
                     </div>
                     {errors.fechanacimiento?.type === "required" && <span style={{color: "red"}} >la fecha de nacimiento es requerida</span>}
@@ -255,6 +268,7 @@ function UserForm() {
                     name='edad'
                     value={user.edad}
                     placeholder='edad' 
+                    disabled
                     onChange={handleChange}
                 />}
                 <br/><br/>
