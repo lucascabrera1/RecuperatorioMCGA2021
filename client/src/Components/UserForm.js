@@ -6,10 +6,11 @@ import { nanoid } from '@reduxjs/toolkit'
 import {useNavigate, useParams} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import { FetchUser } from '../feautures/users/userSlice'
+import Button from './Button'
 
 function UserForm() {
 
-    const {register, handleSubmit, formState : {errors}} = useForm()
+    const {register, handleSubmit, reset, getValues, formState : {errors}} = useForm()
 
     const [id,setId] = useState()
 
@@ -62,30 +63,28 @@ function UserForm() {
         setUser({
             ...user,
             [e.target.name] : e.target.value,
-            
         })
     }
 
     const handleBlur = (e) => {
+        console.log(getValues())
         if (e.target.name == 'fechanacimiento') {
             let edad = CalcularEdad(e.target.value)
             console.log( edad)
-            setUser({
-                ...user,
+            reset({
+                ...getValues(),
                 ["edad"] : edad
             })
         }
     }
 
-    const handleSubmitUser = async (e) => {
-        const data = user
-        e.preventDefault();
+    const handleSubmitUser = async (data, e) => {
         if (params.id) {
             try {
-                console.log(user)
-                await dispatch(UpdateUser({...user, id: params.id})).unwrap()
+                console.log(data)
+                await dispatch(UpdateUser({...data, id: params.id})).unwrap()
                 alert("usuario modificado correctamente")
-                setUser(userInitial)
+                e.target.reset()
                 navigate('/users')
             } catch (error) {
                 console.error(error)
@@ -99,9 +98,9 @@ function UserForm() {
                 _id : users.length + 1
             }))*/
             try {
-                await dispatch(SaveUser(user)).unwrap()
+                await dispatch(SaveUser(data)).unwrap()
                 alert('usuario guardado correctamente')
-                setUser(userInitial)
+                e.target.reset()
             } catch (error) {
                 console.error(error)
             }
@@ -120,8 +119,9 @@ function UserForm() {
             console.log(users)
             if (params.id) {
                 const userFounded = await (dispatch (FetchUser(params.id)).unwrap())
-                console.log(userFounded)
-                setUser(userFounded)
+                const userfnac = {...userFounded, fechanacimiento : userFounded.fechanacimiento.substring(0, 10)}
+                console.log(userfnac)
+                reset(userfnac)
             }
         }
        fetchUser()
@@ -130,7 +130,7 @@ function UserForm() {
     return (
         <div>
             <h1>User Form</h1>
-            <form onSubmit={handleSubmitUser} className='bg-zinc-800 max-w-sm p-4 mb-1 mx-auto'>
+            <form onSubmit={handleSubmit(handleSubmitUser)} className='bg-zinc-800 max-w-sm p-4 mb-1 mx-auto'>
                     <div>
                         <input
                             type='text'
@@ -140,10 +140,8 @@ function UserForm() {
                                 minLength: 3,
                                 pattern: /^[A-Za-z]+$/i
                             })}
-                            value={user.nombre}
                             name='nombre'
-                            placeholder='nombre' 
-                            onChange={handleChange}
+                            placeholder='nombre'
                             className='w-full p-2 rounded-md bg-zinc-600 mb-2'
                         />
                         {errors.nombre?.type === "required" && <span style={{color: "red"}} >el nombre es obligatorio</span>}
@@ -162,11 +160,9 @@ function UserForm() {
                             minLength: 3,
                             pattern: /^[A-Za-z]+$/i
                         })}
-                        value={user.apellido}
                         name='apellido' 
                         placeholder='Apellido'
                         className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                        onChange={handleChange}
                     />
                         {errors.apellido?.type === "required" && <span style={{color: "red"}} >el apellido es obligatorio</span>}
                         {errors.apellido?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
@@ -184,9 +180,9 @@ function UserForm() {
                         })}
                         name='dni'
                         className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                        value={user.dni}
+                        
                         placeholder='documento' 
-                        onChange={handleChange}
+                        
                     />
                     {errors.dni?.type === "required" && <span style={{color: "red"}} >el documento es requerido</span>}
                     {errors.dni?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 10 caracteres</span>}
@@ -197,15 +193,11 @@ function UserForm() {
                 <input 
                     type='email'
                     {...register('email', {
-                        required: true, 
-                        maxLength: 10,
-                        minLength: 6
+                        required: true
                     })}
                     className='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     name='email'
-                    value={user.email}
-                    placeholder='email' 
-                    onChange={handleChange}
+                    placeholder='email'
                     />
                     {errors.email?.type === "required" && <span style={{color: "red"}} >el email es requerido</span>}
                 </div>
@@ -221,9 +213,7 @@ function UserForm() {
                             })}
                             className='w-full p-2 rounded-md bg-zinc-600 mb-2' 
                             name='fechanacimiento'
-                            value={user.fechanacimiento.substring(0, 10)}
-                            placeholder = 'fecha de nacimiento' 
-                            onChange={handleChange}
+                            placeholder = 'fecha de nacimiento'
                             onBlur={handleBlur}
                         /> 
                     </div>
@@ -247,11 +237,9 @@ function UserForm() {
                             minLength: 3,
                             pattern: /^[A-Za-z]+$/i
                         })}
-                        value={user.nacionalidad}
                         name='nacionalidad' 
                         placeholder='Nacionalidad'
                         className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                        onChange={handleChange}
                     />
                         {errors.nacionalidad?.type === "required" && <span style={{color: "red"}} >la nacionalidad es obligatoria</span>}
                         {errors.nacionalidad?.type === "maxLength" && <span style={{color: "red"}} >no puede incluir mas de 50 caracteres</span>}
@@ -260,28 +248,35 @@ function UserForm() {
                 </div>
                 <br/><br/>
 
-                <p>edad {user.edad} años</p>
+                <p>edad</p>
                 
                {  <input 
                     type='number'
                     className='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     name='edad'
-                    value={user.edad}
                     placeholder='edad' 
                     disabled
-                    onChange={handleChange}
+                    {...register('edad')}
                 />}
                 <br/><br/>
-                <input 
-                    type='password'
-                    className='w-full p-2 rounded-md bg-zinc-600 mb-2'
-                    name='contraseña'
-                    value={user.contraseña}
-                    placeholder= 'contraseña' 
-                    onChange={handleChange}
-                /> 
+                <div>
+                <label>contraseña</label>
+                    <input 
+                        type='password'
+                        className='w-full p-2 rounded-md bg-zinc-600 mb-2'
+                        name='contraseña'
+                        placeholder= 'contraseña'
+                        {...register('contraseña', {
+                            required: true,
+                            minLength: 6
+                        })}
+                    />
+                    {errors.contraseña?.type === "required" && <span style={{color: "red"}} >la contraseña es obligatoria</span>}
+                    {errors.contraseña?.type === "minLength" && <span style={{color: "red"}} >al menos 6 caracteres</span>}
+                </div>
+                
                 <br/><br/>
-                <button type='submit' className='bg-indigo-600 px-2 py-1'>Save</button>
+                <Button type="submit" label="Save"></Button>
             </form>
         </div>    
     )
