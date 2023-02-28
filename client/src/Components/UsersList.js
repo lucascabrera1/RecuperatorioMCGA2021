@@ -3,6 +3,7 @@ import {useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { DeleteUser, selectAllUsers, getUsersStatus, fetchUsers } from '../feautures/users/userSlice'
 import { useEffect } from 'react';
+import Button from './Common/Button';
 
 function UsersList() {
   const dispatch = useDispatch()
@@ -41,14 +42,14 @@ function UsersList() {
                     <p>email: {user.email}</p>
                     <p>nacionalidad: {user.nacionalidad}</p>
                     <div className='flex justify-between gap-x-5 p-7'>
-                    <Link 
+                      <Link 
                         to={`/edit-user/${user._id}`} 
                         className='bg-indigo-600 px-2 py-1 rounded-sm text-xs self-center gap-3'> Edit
                       </Link>
-                      <button 
-                        onClick={()=> handleDelete(user._id, user.nombre)}
+                      <Button
+                        onClick ={()=> handleDelete(user._id, user.nombre)}
                         className = 'bg-red-500 px-2 py-1 text-xs rounded-md'
-                      >Delete user</button>
+                      >Delete user</Button>
                     </div>
                   </header>
               </div>
