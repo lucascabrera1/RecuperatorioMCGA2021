@@ -1,7 +1,14 @@
 import React from 'react'
+import styles from '../../Components/style.module.css'
 
 function Input({type, 
-    classname,
+classname = ` ${styles.wfull}
+              ${styles.p2}
+              ${styles.roundedmd}
+              ${styles.bgzinc600} 
+              ${styles.mb2}
+            `
+    ,
     disabled = false,
     name, 
     label, 

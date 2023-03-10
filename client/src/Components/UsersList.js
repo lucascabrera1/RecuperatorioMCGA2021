@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { DeleteUser, selectAllUsers, getUsersStatus, fetchUsers } from '../feautures/users/userSlice'
 import { useEffect } from 'react';
 import Button from './Common/Button';
+import styles from './style.module.css'
 
 function UsersList() {
   const dispatch = useDispatch()
@@ -25,6 +26,8 @@ function UsersList() {
     return newDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');
   }  
 
+  console.log(styles)
+
   return (
     <div className='w-15/1 bg-red-100'>
       <h1 className='rounded-md bg-black'>Cantidad de usuarios registrados al momento: {users.length}</h1>
@@ -44,11 +47,25 @@ function UsersList() {
                     <div className='flex justify-between gap-x-5 p-7'>
                       <Link 
                         to={`/edit-user/${user._id}`} 
-                        className='bg-indigo-600 px-2 py-1 rounded-sm text-xs self-center gap-3'> Edit
+                        className={ `
+                          ${styles.bgindigo600} 
+                          ${styles.px2} 
+                          ${styles.py1}
+                          ${styles.textxs}
+                          ${styles.selfcenter}
+                          ${styles.gap3}
+                          ${styles.roundedsm}
+                        `}>Edit
                       </Link>
                       <Button
                         onClick ={()=> handleDelete(user._id, user.nombre)}
-                        className = 'bg-red-500 px-2 py-1 text-xs rounded-md'
+                        className = {`
+                          ${styles.bgred500}
+                          ${styles.px2}
+                          ${styles.py1}
+                          ${styles.textxs}
+                          ${styles.roundedmd}
+                        `}
                       >Delete user</Button>
                     </div>
                   </header>

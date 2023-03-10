@@ -8,6 +8,7 @@ import {useForm} from 'react-hook-form'
 import { FetchUser } from '../feautures/users/userSlice'
 import Button from './Common/Button'
 import Input from './Common/Input'
+import styles from './style.module.css'
 
 function UserForm() {
 
@@ -134,7 +135,6 @@ function UserForm() {
             <form onSubmit={handleSubmit(handleSubmitUser)} className='bg-zinc-800 max-w-sm p-4 mb-1 mx-auto'>
                 <Input
                     type="text"
-                    classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     name="nombre"
                     label="nombre"
                     register={register}
@@ -154,7 +154,6 @@ function UserForm() {
                     type='text'
                     name='apellido'
                     label='Apellido'
-                    classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     register={register}
                     registerOptions= {{
                         required: true, maxLength: 50, minLength: 3, pattern: /^[A-Za-z]+$/i 
@@ -172,7 +171,6 @@ function UserForm() {
                     type='number'
                     name='dni' 
                     label='Documento'
-                    classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     register={register}
                     registerOptions= {{
                         required: true, maxLength: 10, minLength: 6 
@@ -190,7 +188,6 @@ function UserForm() {
                     type='email'
                     name='email' 
                     label='Correo Electrónico'
-                    classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     register={register}
                     registerOptions= {{
                         required: true
@@ -207,7 +204,6 @@ function UserForm() {
                         type='date'
                         name='fechanacimiento' 
                         label='fechanacimiento'
-                        classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                         register={register}
                         registerOptions= {{
                             required: true, min: "1958-01-01",max: "2004-12-31"
@@ -228,7 +224,6 @@ function UserForm() {
                         type='text'
                         name='nacionalidad' 
                         label='Nacionalidad'
-                        classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                         register={register}
                         registerOptions= {{
                             required: true, pattern: /^[A-Za-z]+$/i
@@ -244,7 +239,6 @@ function UserForm() {
                     type='number'
                     name='edad' 
                     label='Edad'
-                    classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     register={register}
                     registerOptions= {{
                     }}
@@ -255,7 +249,6 @@ function UserForm() {
 
                 <Input
                     type='password'
-                    classname='w-full p-2 rounded-md bg-zinc-600 mb-2'
                     name='contraseña'
                     label='contraseña'
                     register={register}
@@ -271,7 +264,7 @@ function UserForm() {
                 <br/><br/>
                 
                 <br/><br/>
-                <Button type="submit">Save</Button>
+                <Button type="submit" className={`${styles.bgindigo600} ${styles.py1} ${styles.px2}`}>Save</Button>
             </form>
         </div>    
     )
