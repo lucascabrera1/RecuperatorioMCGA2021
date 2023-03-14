@@ -4,14 +4,33 @@ import Users from './Components/Users.js'
 import Home from './Components/Home.js'
 import NotFoundRoute from './Components/NotFoundRoute';
 import UserForm from './Components/UserForm';
+import { useState } from 'react';
 
 function App() {
   
+  const [user, setUser] = useState(null)
+
+  const Login = () => {
+    setUser({
+      id: 10,
+      name: "Aníbal"
+    })
+  }
+
+  const Logout = () => setUser(null)
+
   return (
     <div className="bg-zinc-900  text-white Center" >
       <header className='App-header'><h1>Recuperatorio Modelos computacionales de Gestión Administrativa</h1></header>
       <div className='items-center justify-center'>
       <BrowserRouter>
+      {
+        !user ? (
+          <button onClick={Login}>Login</button>
+        ) : (
+          <button onClick={Logout}>Logout</button>
+        )
+      }
       <navbar>
         <ul>
           <li><NavLink to="/home">Home</NavLink></li>
