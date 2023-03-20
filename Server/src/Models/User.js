@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs"
 
 let schemaUsuario = new mongoose.Schema ({
     nombre : {
@@ -35,6 +36,15 @@ let schemaUsuario = new mongoose.Schema ({
         required : true
     }
 })
+
+schemaUsuario.methods.encryptPassword = async (contraseña) => {
+    const salt = await bcrypt.genSalt(4)
+    return bcrypt.hash(contraseña, salt)
+}
+
+schemaUsuario.methods.validatePassword = function (contraseña) {
+    return bcrypt.compare(contraseña, this.contraseña)
+}
 
 schemaUsuario.virtual("edad").get(function() {
     //calcualr edad a partir de this.fechanacimiento

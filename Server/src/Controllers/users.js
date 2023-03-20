@@ -1,4 +1,8 @@
 import User from '../Models/User.js'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config({path: '../.env'})
+const stoken = process.env.SECRET
 
 const ValidateUser = (body) => {
     if (body.nombre == null || body.nombre.length < 1) {
@@ -10,6 +14,7 @@ const ValidateUser = (body) => {
 const GetUser = async (req, res) =>{
     try {
         const userfound = await User.findOne({_id: req.params.id})
+        userfound.contraseña = await userfound.encryptPassword(userfound.contraseña)
         if (!userfound || userfound.length === 0){
             return res.status(404).json({
                 error: true,
@@ -31,9 +36,15 @@ const AddUser = async (req, res) => {
         let error = ValidateUser(req.body)
         if (!error) {
             const newUSer =  new User(req.body)
-            //console.log(newUSer)
+            newUSer.contraseña = await newUSer.encryptPassword(newUSer.contraseña)
+            console.log(newUSer.contraseña)
             const usuarioGuardado = await newUSer.save()
+            console.log(stoken)
+            const token = jwt.sign({id: newUSer._id}, stoken, {
+                expiresIn: 60 * 60 *24
+            })
             console.log(usuarioGuardado)
+            res.json({auth: true, token: token})
             return res.send(usuarioGuardado)
         } else{
             res.status(400).json({
@@ -82,6 +93,7 @@ const getUsers = async (req, res) => {
         let usuariosdevueltos = []
         console.log(usuarios)
         for (const elem of usuarios) {
+            elem.contraseña = await elem.encryptPassword(elem.contraseña)
             let newElem = {
                 "_id" : elem._id,
                 "nombre" : elem.nombre,
@@ -106,6 +118,7 @@ const getUserByDni = async (req, res) => {
     console.log(req.params.dni)
     try {
         const response = await User.findOne({dni : req.params.dni})
+        response.contraseña = await response.encryptPassword(response.contraseña),
         console.log(req.params)
         if (!response || response.length === 0){
             return res.status(404).json({
@@ -126,6 +139,7 @@ const getUserByEmail = async (req, res) =>{
     console.log(req.params.email)
     try {
         const response = await User.findOne({email : req.params.email})
+        response.contraseña = await response.encryptPassword(response.contraseña),
         console.log(req.params)
         if (!response || response.length === 0){
             return res.status(404).json({
@@ -146,4 +160,12 @@ const todosLosMetodos = async (req, res) => {
     return await res.send("devuelve el mismo mensaje independientemente del metodo seleccionado")
 }
 
-export default {AddUser, GetUser, EditUser, DeleteUser, getUsers, getUserByDni, getUserByEmail, todosLosMetodos}
+export default {AddUser, 
+    GetUser, 
+    EditUser, 
+    DeleteUser, 
+    getUsers, 
+    getUserByDni, 
+    getUserByEmail, 
+    todosLosMetodos
+}
