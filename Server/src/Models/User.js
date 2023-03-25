@@ -38,7 +38,7 @@ let schemaUsuario = new mongoose.Schema ({
 })
 
 schemaUsuario.methods.encryptPassword = async (contraseña) => {
-    const salt = await bcrypt.genSalt(4)
+    const salt = await bcrypt.genSalt(9)
     return bcrypt.hash(contraseña, salt)
 }
 

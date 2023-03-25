@@ -7,19 +7,20 @@ const stoken = process.env.SECRET
 
 const SignIn = async (req, res, next) => {
     const {email, contraseña} = req.body
-    console.log(email. contraseña)
+    console.log(email, contraseña)
     const user = await User.findOne({email: email})
     if (!user) {
-        return res.status(404).send("User doesn't exists ")
+        return res.status(400).send("User or password invalid")
     }
     const pwdisvalid = await user.validatePassword(contraseña)
     if (!pwdisvalid) {
-        return res.status(401).send({auth: false, token: null})
+        return res.status(400).send({user: null, token: null})
     }
+    console.log('password: ' + pwdisvalid)
     const token = jwt.sign({id: user._id}, stoken, {
         expiresIn: 60 * 60 *24
     })
-    res.json({auth: true, token: token})
+    res.json({user: user, token: token})
 }
 
 const Me =  async (req, res, next) => {

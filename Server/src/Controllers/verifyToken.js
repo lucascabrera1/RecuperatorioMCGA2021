@@ -4,18 +4,28 @@ dotenv.config({path: '../.env'})
 const stoken = process.env.SECRET
 
 function verifyToken (req, res, next) {
-    const token = req.headers['x-access-token'];
+    const token = req.headers['authorization'];
+    
     if (!token) {
         return res.status(401).json({
             auth: false,
             message: "no token provided"
         })
     }
-    const decoded = jwt.verify(token, stoken)
-    console.log(decoded)
-    req.userId = decoded.id
-    console.log(req.userId)
-    next();
+    try {
+        const decoded = jwt.verify(token, stoken)
+        console.log(decoded)
+        req.userId = decoded.id
+        console.log(req.userId)
+        next();
+    } catch (error) {
+        res.status(400).json({
+            auth: false,
+            message: "invalid token"
+        })
+        console.error(error.message)
+    }
+    
 }
 
 export default verifyToken
