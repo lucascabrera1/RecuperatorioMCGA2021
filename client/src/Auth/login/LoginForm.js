@@ -15,16 +15,28 @@ const Login = () =>{
 
     const SubmitUser = async (user) => {
         console.log(user)
-        alert('aca junto los datos del usuario')
         try {
-            const userData = await login({user, pwd}).unwrap()
+            const userData = await login({user, pwd})
             dispatch(setCredentials({...userData, user}))
             setUser('')
             setPwd('')
+            console.log({user, pwd})
             navigate('/users')
         } catch (error) {
-            
+            if (!error?.response) {
+                setErrMsg('No server response')
+            } else if (error.response?.status === 400) {
+                setErrMsg('Missing username or password')
+            } else if (error.response?.status === 401) {
+                setErrMsg('Unauthorized')
+            } else {
+                setErrMsg('Login Failed')
+            }
+            console.error(error)
         }
+        //console.log(userData)
+        errRef.current?.focus()
+        alert('aca junto los datos del usuario')
     }
 
     const userRef = useRef()
@@ -42,7 +54,7 @@ const Login = () =>{
     }, [])
 
     useEffect(() => {
-        setErrMsg('')
+        setErrMsg(errMsg)
     }, [user, pwd])
     
 
