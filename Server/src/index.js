@@ -13,10 +13,7 @@ const app = express()
 const port = process.env.PORT
 
 //uses
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true
-}))
+app.use(cors())
 app.use(express.json())
 app.use('/', router)
 app.set('appName', 'Recuperatorio MCGA 2021 back-end')

@@ -7,32 +7,21 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../feautures/users/authSlice";
-import { useLoginMutation } from "../apiAuth/authApiSlice";
+import { login } from "../../feautures/users/authSlice";
 
 
 const Login = () =>{
     const {register, handleSubmit, reset, getValues, formState : {errors}} = useForm()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const SubmitUser = async (user) => {
         console.log(user)
-        try {
-            const userData = await login({user, pwd})
-            dispatch(setCredentials({...userData, user}))
-            setUser('')
-            setPwd('')
-            console.log({user, pwd})
-            navigate('/users')
-        } catch (error) {
-            if (!error?.response) {
-                setErrMsg('No server response')
-            } else if (error.response?.status === 400) {
-                setErrMsg('Missing username or password')
-            } else if (error.response?.status === 401) {
-                setErrMsg('Unauthorized')
-            } else {
-                setErrMsg('Login Failed')
-            }
-            console.error(error)
+        const userData = await dispatch(login(user)).unwrap()
+        if (userData) {
+            navigate("/home")
+        } else {
+            setErrMsg("Credenciales inválidas")
         }
         //console.log(userData)
         errRef.current?.focus()
@@ -44,11 +33,10 @@ const Login = () =>{
     const [user, setUser] = useState('')
     const [pwd, setPwd] = useState('')
     const [errMsg, setErrMsg] = useState('')
-    const navigate = useNavigate()
+    
 
-    const [login, {isLoading}] = useLoginMutation()
-    const dispatch = useDispatch()
-
+    
+    
     useEffect(() => {
         userRef.current?.onFocus()
     }, [])

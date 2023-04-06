@@ -1,9 +1,7 @@
-import {applyMiddleware, configureStore} from '@reduxjs/toolkit'
+import {configureStore} from '@reduxjs/toolkit'
 import usersReducer from '../feautures/users/userSlice'
 import nacionSlice from '../feautures/users/nacionSlice'
 import authSlice from '../feautures/users/authSlice';
-import { apiSlice } from '../Auth/apiAuth/apiSlice';
-import thunk from 'redux-thunk';
 
 /* const myMiddleware = store => next => action =>  {
     console.log("middleware running")
@@ -20,12 +18,8 @@ export const store = configureStore({
     reducer: {
         users: usersReducer,
         nations: nacionSlice,
-        auth: authSlice,
-        [apiSlice.reducerPath] : apiSlice.reducer
-    },
-    middleware: getDefaultMiddleware => 
-        getDefaultMiddleware().concat(apiSlice.middleware),
-    devTools: true
-}, applyMiddleware(thunk))
+        auth: authSlice
+    }
+})
 
 //console.log(store.getState())
