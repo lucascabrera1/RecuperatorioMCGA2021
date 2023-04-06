@@ -6,7 +6,6 @@ import styles from '../../Components/style.module.css'
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../../feautures/users/authSlice";
 import { login } from "../../feautures/users/authSlice";
 
 
