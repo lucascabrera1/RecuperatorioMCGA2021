@@ -81,6 +81,7 @@ function UserForm() {
     }
 
     const handleSubmitUser = async (data, e) => {
+        console.log('se llama al handle submit user')
         if (params.id) {
             try {
                 console.log(data)
@@ -99,6 +100,7 @@ function UserForm() {
                 //_id: nanoid()
                 _id : users.length + 1
             }))*/
+            console.log(data)
             try {
                 await dispatch(SaveUser(data)).unwrap()
                 alert('usuario guardado correctamente')

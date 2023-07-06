@@ -42,7 +42,7 @@ export const authSlice = createSlice ({
             console.log(action.payload)
             state.accessToken = action.payload.token
             state.user = action.payload.user
-            axios.defaults.headers.common['authorization'] = state.accessToken
+            axios.defaults.headers.common['authorization'] = `Bearer ${state.accessToken}`
         })
     }
 })
