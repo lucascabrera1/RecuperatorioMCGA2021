@@ -44,7 +44,7 @@ const AddUser = async (req, res) => {
                 expiresIn: 60 * 60 *24
             })
             console.log(usuarioGuardado)
-            res.json({auth: true, token: token})
+            //res.json({auth: true, token: token})
             return res.send(usuarioGuardado)
         } else{
             res.status(400).json({
